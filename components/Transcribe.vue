@@ -1,8 +1,10 @@
 <script setup>
+const config = useRuntimeConfig()
+
 import { ref } from 'vue'
 import axios from 'axios'
 
-console.log(import.meta.env.VITE_WHISPERING_API_HOST)
+console.log(config.public.whisperingApiHost)
 
 const uploadedFile = ref(null)
 const transcription = ref(null)
