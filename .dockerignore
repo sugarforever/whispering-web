@@ -1,0 +1,32 @@
+# Ignore development and testing files
+node_modules/
+npm-debug.log
+yarn-error.log
+.dockerignore
+.git
+.gitignore
+.eslintrc.js
+.nuxt
+.env
+*.md
+
+# Ignore version control files and directories
+*.git
+*.gitignore
+*.svn
+*.hg
+
+# Ignore editor-specific files and directories
+.vscode/
+.idea/
+
+# Ignore OS-specific files and directories
+.DS_Store
+Thumbs.db
+
+# Ignore build and cache files
+/dist/
+/.nuxt/
+/.cache/
+/static/
+/.gitkeep
