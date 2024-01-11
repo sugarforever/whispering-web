@@ -1,0 +1,14 @@
+version: '3'
+services:
+  whispering:
+    image: 0001coder/whispering:latest
+    pull_policy: always
+    ports:
+      - "8000:8000"
+    restart: always
+  whispering-web:
+    image: 0001coder/whispering-web:latest
+    pull_policy: always
+    ports:
+      - "8080:80"
+    restart: always

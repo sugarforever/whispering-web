@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import axios from 'axios'
 
+console.log(import.meta.env.VITE_WHISPERING_API_HOST)
+
 const uploadedFile = ref(null)
 const transcription = ref(null)
 const summary = ref(null)
