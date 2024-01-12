@@ -7,9 +7,9 @@ services:
   #    - "8000:8000"
   #  restart: always
   whispering-web:
-    image: 0001coder/whispering-web:latest
-    environment:
-      - VITE_WHISPERING_API_HOST=dfjsldkfjsl
+    image: whispering-web:4.0
+    env_file:
+      - .env
     ports:
-      - "8080:80"
+      - "8080:3000"
     restart: always

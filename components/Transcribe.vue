@@ -4,14 +4,16 @@ const config = useRuntimeConfig()
 import { ref } from 'vue'
 import axios from 'axios'
 
-console.log(config.public.whisperingApiHost)
+console.log(config.public.apiBase)
 
-const uploadedFile = ref(null)
 const transcription = ref(null)
 const summary = ref(null)
 
+const state = reactive({
+  file: File
+})
 const onFileChange = (e) => {
-  uploadedFile.value = e.target.files[0]
+  state.file = e.target.files[0]
 }
 
 const onTranscribe = async () => {
@@ -19,12 +21,12 @@ const onTranscribe = async () => {
   transcription.value = null
   summary.value = null
 
-  const apiUrl = 'http://localhost:8000/v1/transcribe';
+  const apiUrl = `${config.public.apiBase}/v1/transcribe`;
   const apiKey = '1234567890';
 
   try {
     const formData = new FormData();
-    formData.append('file', uploadedFile.value);
+    formData.append('file', state.file);
 
     const response = await axios.post(apiUrl, formData, {
       headers: {
@@ -46,21 +48,37 @@ const onTranscribe = async () => {
 
 <template>
   <div>
-    <form @submit.prevent="onTranscribe">
-      <input type="file" @change="onFileChange" />
-      <button type="submit">Transcribe</button>
-    </form>
+    <UCard>
+      <template #header>
+        <div class="font-bold text-xl">Audio to Text</div>
+      </template>
 
-    <div>
-      <div>
-        <h2>Transcription</h2>
-        <p>{{ transcription }}</p>
-      </div>
+      <UForm :state="state" class="space-y-4" @submit="onTranscribe">
+        <UFormGroup label="Audio File" name="file">
+          <UInput type="file" @change="onFileChange" />
+        </UFormGroup>
 
+        <UButton type="submit">
+          Transcribe
+        </UButton>
+      </UForm>
+
+      <UDivider label="Processing Result" class="my-4" />
       <div>
-        <h2>Summary</h2>
-        <p>{{ summary }}</p>
+        <UCard>
+          <template #header>
+            <div class="font-bold">Transcription</div>
+          </template>
+          <p>{{ transcription }}</p>
+        </UCard>
+
+        <UCard class="mt-4">
+          <template #header>
+            <div class="font-bold">Summary</div>
+          </template>
+          <p>{{ summary }}</p>
+        </UCard>
       </div>
-    </div>
+    </UCard>
   </div>
 </template>

@@ -1,29 +1,27 @@
-# Stage 1: Build the Nuxt.js application
-FROM node:20.11.0 AS build-stage
+FROM node:16-alpine as builder
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+RUN npm install -g pnpm
 
-# Install Nuxt.js dependencies
-RUN npm install
+COPY package.json pnpm-lock.yaml /app/
 
-# Copy the rest of the application source code
-COPY . .
+RUN pnpm install
 
-# Build the Nuxt.js application for production
-RUN npm run build
+COPY . /app/
 
-# Stage 2: Serve the production build using a lightweight web server
-FROM nginx:alpine AS production-stage
+RUN pnpm run build
 
-# Copy the production build from the build-stage to the NGINX container
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# start final image
+FROM node:16-alpine
 
-# Expose port 80 for the NGINX server
-EXPOSE 80
+WORKDIR /app
 
-# Start the NGINX server
-CMD ["nginx", "-g", "daemon off;"]
+COPY --from=builder /app/.output .output
+COPY --from=builder /app/.nuxt .nuxt
+
+ENV NUXT_PUBLIC_API_BASE http://localhost:9000
+ENV HOST 0.0.0.0
+EXPOSE 3000
+
+CMD ["node", ".output/server/index.mjs"]

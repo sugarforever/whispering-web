@@ -1,9 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  modules: ['@nuxt/ui'],
   runtimeConfig: {
     public: {
-        whisperingApiHost: process.env.WHISPERING_API_HOST || 'http://localhost:8000'
+        apiBase: 'http://localhost:8000'
     }
   }
 })
