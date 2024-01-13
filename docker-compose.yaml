@@ -2,12 +2,17 @@ version: '3'
 services:
   whispering:
     image: 0001coder/whispering:latest
+    env_file:
+      - .env
     pull_policy: always
     ports:
       - "8000:8000"
     restart: always
   whispering-web:
-    image: 0001coder/whispering-web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #image: 0001coder/whispering-web:latest
     env_file:
       - .env
     ports:
